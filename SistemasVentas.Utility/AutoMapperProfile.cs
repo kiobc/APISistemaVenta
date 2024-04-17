@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,34 @@ namespace SistemasVentas.Utility
              opt => opt.MapFrom(origen => origen.EsActivo == 1 ? true : false));
             #endregion Usuario
 
+            #region Categoria
+            CreateMap<Categoria, CategoriaDTO>().ReverseMap();
+            #endregion Categoria
+
+            #region Producto
+            CreateMap<Producto, ProductoDTO>()
+            .ForMember(destino =>
+             destino.DescripcionCategoria,
+             opt => opt.MapFrom(origen => origen.IdCategoriaNavigation.Nombre))
+            .ForMember(destino =>
+             destino.Precio,
+             opt => opt.MapFrom(origen => Convert.ToString(origen.Precio.Value, new CultureInfo("es-PE"))))
+            .ForMember(destino =>
+             destino.EsActivo,
+             opt => opt.MapFrom(origen => origen.EsActivo == true ? 1 : 0));
+
+
+            CreateMap<ProductoDTO, Producto>()
+     .ForMember(destino =>
+      destino.IdCategoriaNavigation,
+      opt => opt.Ignore())
+     .ForMember(destino =>
+      destino.Precio,
+      opt => opt.MapFrom(origen => Convert.ToDecimal(origen.Precio, new CultureInfo("es-PE"))))
+     .ForMember(destino =>
+      destino.EsActivo,
+      opt => opt.MapFrom(origen => origen.EsActivo == 1 ? true : false));
+            #endregion Prodcuto
 
 
         }
