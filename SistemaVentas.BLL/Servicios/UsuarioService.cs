@@ -74,14 +74,50 @@ namespace SistemaVentas.BLL.Servicios
             }
         }
 
-        public Task<bool> Editar(UsuarioDTO modelo)
+        public async Task<bool> Editar(UsuarioDTO modelo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var usuarioModelo= _mapper.Map<Usuario>(modelo);
+                var usuarioEncontrado= await _usuarioRepositorio.Obtener(u=>u.IdUsuario==usuarioModelo.IdUsuario);
+                if (usuarioEncontrado==null)
+                    throw new TaskCanceledException("El usuario no existe");
+                usuarioEncontrado.NombreCompleto = usuarioModelo.NombreCompleto;
+                usuarioEncontrado.Correo = usuarioModelo.Correo;
+                usuarioEncontrado.IdRol=usuarioModelo.IdRol;
+                usuarioEncontrado.Clave=usuarioModelo.Clave;
+                usuarioEncontrado.EsActivo = usuarioModelo.EsActivo;
+
+                bool respuesta=await _usuarioRepositorio.Editar(usuarioEncontrado);
+
+                if (respuesta)
+                    throw new TaskCanceledException("No se pudo editar");
+                return respuesta;
+
+            }
+            catch {
+                throw;
+            }
         }
 
-        public Task<bool> Eliminar(int id)
+        public async Task<bool> Eliminar(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var usuarioEncontrado= await _usuarioRepositorio.Obtener(u=>u.IdUsuario==id);
+                if (usuarioEncontrado==null)
+                    throw new TaskCanceledException("El usuario no existe");
+                bool respuesta=await _usuarioRepositorio.Eliminar(usuarioEncontrado);
+
+                if (respuesta)
+                    throw new TaskCanceledException("No se pudo eliminar");
+                return respuesta;
+
+            }
+            catch
+            {
+                throw;
+            }
         }
 
       
