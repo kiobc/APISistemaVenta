@@ -82,9 +82,23 @@ namespace SistemaVentas.BLL.Servicios
             }
         }
 
-        public Task<bool> Eliminar(int id)
+        public async Task<bool> Eliminar(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var productoEncontrado = await _productoRepositorio.Obtener(p => p.IdProducto == id);
+                if (productoEncontrado == null)
+                    throw new TaskCanceledException("El producto no existe");
+                bool respuesta = await _productoRepositorio.Eliminar(productoEncontrado);
+                if (!respuesta)
+                    throw new TaskCanceledException("No se pudo eliminar");
+                return respuesta; 
+            }
+            catch
+            {
+                throw;
+
+            }
         }
 
       
