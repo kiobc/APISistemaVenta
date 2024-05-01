@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SistemaVentas.BLL.Servicios.Contrato
 {
-    internal interface IProductoService
+    public interface IProductoService
     {
         Task<List<ProductoDTO>> Lista();
         Task<ProductoDTO> Crear(ProductoDTO modelo);
