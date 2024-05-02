@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using SistemaVentas.IOC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.InyectarDependencias(builder.Configuration);
 
+builder.Services.AddCors(Options =>
+{
+    Options.AddPolicy("Nueva Politica", app =>
+    {
+        app.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,6 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("Nueva Politica");
 
 app.UseAuthorization();
 
