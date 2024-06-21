@@ -42,14 +42,14 @@ namespace SistemaVentas.BLL.Servicios
                 throw;
             }
         }
-        public async Task<List<VentaDTO>> Historial(string buscaPor, string numeroVenta, string fechaInicio, string fechaFin)
+        public async Task<List<VentaDTO>> Historial(string buscarPor, string numeroVenta, string fechaInicio, string fechaFin)
         {
             IQueryable<Venta> query = await _ventaRepositorio.Consultar();
             var ListaResultado= new List<Venta>();
 
             try
             {
-                if(buscaPor=="fecha")
+                if(buscarPor=="fecha")
                 {
                     DateTime fech_Inicio= DateTime.ParseExact(fechaInicio,"dd/MM/yyyy", new CultureInfo("es-EC"));
                     DateTime fech_Fin = DateTime.ParseExact(fechaFin, "dd/MM/yyyy", new CultureInfo("es-EC"));
